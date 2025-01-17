@@ -558,9 +558,11 @@ endif
 # Add -DTRACE_INSTRUCTIONS to trace instruction execution
 # Can add -DTRACE_REGISTERS to additionally print register values
 ifeq ($(DEBUG), 1)
-	OPTIMIZE      := -O0 -g
+	OPTIMIZE := -O0 -g
+	OPTIMIZE_CPU_THREADED := -O0 -g
 else
-	OPTIMIZE      := -O3 -DNDEBUG
+	OPTIMIZE := -O3 -DNDEBUG
+	OPTIMIZE_CPU_THREADED := -O1 -DNDEBUG
 endif
 
 DEFINES := -DHAVE_STRINGS_H -DHAVE_STDINT_H -DHAVE_INTTYPES_H -D__LIBRETRO__ -DINLINE=inline -Wall
@@ -628,7 +630,7 @@ else
 endif
 
 cpu_threaded.o: cpu_threaded.c
-	$(CC) $(INCFLAGS) $(CFLAGS) $(OPTIMIZE) -Wno-unused-variable -Wno-unused-label -c  -o $@ $<
+	$(CC) $(INCFLAGS) $(CFLAGS) $(OPTIMIZE_CPU_THREADED) -Wno-unused-variable -Wno-unused-label -c  -o $@ $<
 
 %.o: %.S
 	$(CC) $(ASFLAGS) $(CFLAGS) $(OPTIMIZE) -c -o $@ $<
